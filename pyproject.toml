@@ -16,6 +16,7 @@ ipython = "^7.19.0"
 black = "^20.8b1"
 flake8 = "^3.8.4"
 pytype = "^2020.11.23"
+isort = "^5.6.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-from typing import Optional, Tuple, Iterable, List
+import csv
+import functools
+import itertools
+import operator
+from typing import Iterable, List, Optional, Tuple
 
 import prettyprinter
-import csv
-import itertools
-import functools
-import operator
 
 
 def get_point(

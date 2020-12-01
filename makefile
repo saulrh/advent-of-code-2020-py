@@ -1,4 +1,4 @@
-fix: black pytype flake8
+fix: black pytype flake8 isort
 
 black:
 	poetry run black --quiet .
@@ -8,6 +8,9 @@ pytype:
 
 flake8:
 	poetry run flake8 .
+
+isort:
+	poetry run isort .
 
 problem01:
 	poetry run python -m unittest tests/test_problem01.py
