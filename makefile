@@ -1,5 +1,8 @@
 fix: black pytype flake8 isort
 
+test:
+	poetry run python -m unittest
+
 black:
 	poetry run black --quiet .
 
