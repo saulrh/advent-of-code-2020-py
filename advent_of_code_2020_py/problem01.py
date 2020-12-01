@@ -2,20 +2,17 @@
 
 import csv
 import functools
-import itertools
+import itertools as it
 import operator
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Tuple
 
 import prettyprinter
 
 
 def get_point(
     data: Iterable[int], target: int, length: int
-) -> Optional[Tuple[int, ...]]:
-    for point in itertools.combinations(data, length):
-        if sum(point) == target:
-            return point
-    return None
+) -> Tuple[int, ...]:
+    return next(p for p in it.combinations(data, length) if sum(p) == target)
 
 
 def get_result(point: Iterable[int]) -> int:
