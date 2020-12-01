@@ -4,9 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["Saul Reynolds-Haertle"]
 
-[tool.poetry.scripts]
-01 = "advent_of_code_2020_py.01:main"
-
 [tool.poetry.dependencies]
 python = ">=3.7,<3.9"
 prettyprinter = "^0.18.0"
