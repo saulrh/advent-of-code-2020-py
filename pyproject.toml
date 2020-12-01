@@ -11,6 +11,12 @@ authors = ["Saul Reynolds-Haertle"]
 python = ">=3.7,<3.9"
 prettyprinter = "^0.18.0"
 
+[tool.isort]
+profile="google"
+skip_gitignore=true
+src_paths="advent_of_code_2020_py"
+color_output=true
+
 [tool.poetry.dev-dependencies]
 ipython = "^7.19.0"
 black = "^20.8b1"

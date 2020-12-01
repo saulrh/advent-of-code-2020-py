@@ -10,7 +10,7 @@ flake8:
 	poetry run flake8 .
 
 isort:
-	poetry run isort .
+	poetry run isort --atomic .
 
 problem01:
 	poetry run python -m unittest tests/test_problem01.py
