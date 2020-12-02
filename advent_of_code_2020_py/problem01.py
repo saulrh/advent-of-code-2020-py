@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
-import csv
 import functools
 import itertools as it
 import operator
-from typing import Iterable, List, Tuple
+from typing import Iterable, Tuple
 
-import prettyprinter
+from advent_of_code_2020_py import problem
 
 
 def get_point(
@@ -19,24 +18,12 @@ def get_result(point: Iterable[int]) -> int:
     return functools.reduce(operator.mul, point, 1)
 
 
-def get_data() -> List[int]:
-    with open("inputs/problem01.part1.csv", "r") as f:
-        reader = csv.DictReader(f)
-        return [int(line["Value"]) for line in reader]
-
-
 def part1():
-    data = get_data()
-    point = get_point(data, 2020, 2)
-    prettyprinter.cpprint(point)
-    prettyprinter.cpprint(get_result(point))
+    print(get_result(get_point(problem.Get(1, int), 2020, 2)))
 
 
 def part2():
-    data = get_data()
-    point = get_point(data, 2020, 3)
-    prettyprinter.cpprint(point)
-    prettyprinter.cpprint(get_result(point))
+    print(get_result(get_point(problem.Get(1, int), 2020, 3)))
 
 
 if __name__ == "__main__":

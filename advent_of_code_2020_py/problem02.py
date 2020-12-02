@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import collections
 import re
-from typing import List
 
 import attr
+
+from advent_of_code_2020_py import problem
 
 _LINE_PARSE_REG = re.compile(
     r"(?P<n1>\d+)-(?P<n2>\d+) (?P<letter>\S): (?P<password>.+)"
@@ -33,26 +33,20 @@ class Entry(object):
         )
 
     def Part1Valid(self):
-        counts = collections.Counter(self.password)
-        return self.n1 <= counts[self.letter] <= self.n2
+        return self.n1 <= self.password.count(self.letter) <= self.n2
 
     def Part2Valid(self):
-        l1 = self.password[self.n1 - 1] == self.letter
-        l2 = self.password[self.n2 - 1] == self.letter
-        return l1 != l2
-
-
-def get_data() -> List[Entry]:
-    with open("inputs/problem02.part1.csv", "r") as f:
-        return [Entry.FromLine(line) for line in f]
+        left_correct = self.password[self.n1 - 1] == self.letter
+        right_correct = self.password[self.n2 - 1] == self.letter
+        return left_correct != right_correct
 
 
 def part1():
-    print(sum(1 for d in get_data() if d.Part1Valid()))
+    print(sum(1 for d in problem.Get(2, Entry.FromLine) if d.Part1Valid()))
 
 
 def part2():
-    print(sum(1 for d in get_data() if d.Part2Valid()))
+    print(sum(1 for d in problem.Get(2, Entry.FromLine) if d.Part2Valid()))
 
 
 if __name__ == "__main__":

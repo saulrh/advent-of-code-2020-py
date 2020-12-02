@@ -1,3 +1,6 @@
+fix:
+	poetry run pre-commit run --all-files
+
 test:
 	poetry run python -m unittest
 
