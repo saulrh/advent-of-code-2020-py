@@ -12,7 +12,7 @@ _LINE_PARSE_REG = re.compile(
 )
 
 
-@attr.s()
+@attr.s(frozen=True)
 class Entry(object):
     n1 = attr.ib(type=int, converter=int)
     n2 = attr.ib(type=int, converter=int)
@@ -20,7 +20,7 @@ class Entry(object):
     password = attr.ib(type=str)
 
     @classmethod
-    def Parse(self, line) -> Entry:
+    def FromLine(self, line) -> Entry:
         match = _LINE_PARSE_REG.fullmatch(line.strip())
         if not match:
             raise ValueError(f"Could not parse line '{line}'")
@@ -43,7 +43,7 @@ class Entry(object):
 
 def get_data() -> List[Entry]:
     with open("inputs/problem02.part1.csv", "r") as f:
-        return [Entry.Parse(line) for line in f]
+        return [Entry.FromLine(line) for line in f]
 
 
 def part1():
