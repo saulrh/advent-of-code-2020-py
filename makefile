@@ -5,6 +5,7 @@ test:
 	poetry run python -m unittest
 
 setup:
+	poetry install
 	poetry run pre-commit install
 
 problem%:
