@@ -4,6 +4,7 @@ from advent_of_code_2020_py import problem01
 
 EXAMPLE_DATA = [1721, 979, 366, 299, 675, 1456]
 
+
 class Test01(unittest.TestCase):
     def test_example(self):
         pair = problem01.get_point(EXAMPLE_DATA, 2020, 2)
