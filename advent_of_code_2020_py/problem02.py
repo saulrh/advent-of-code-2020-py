@@ -47,13 +47,11 @@ def get_data() -> List[Entry]:
 
 
 def part1():
-    data = get_data()
-    print(sum(1 for d in data if d.Part1Valid()))
+    print(sum(1 for d in get_data() if d.Part1Valid()))
 
 
 def part2():
-    data = get_data()
-    print(sum(1 for d in data if d.Part2Valid()))
+    print(sum(1 for d in get_data() if d.Part2Valid()))
 
 
 if __name__ == "__main__":
