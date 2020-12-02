@@ -1,23 +1,24 @@
 #!/usr/bin/env python
 
 from __future__ import annotations
+
 import collections
-import attr
 import re
 from typing import List
 
+import attr
 
 _LINE_PARSE_REG = re.compile(
     r"(?P<n1>\d+)-(?P<n2>\d+) (?P<letter>\S): (?P<password>.+)"
 )
 
 
-@attr.s(frozen=True)
+@attr.s(auto_attribs=True, frozen=True)
 class Entry(object):
-    n1 = attr.ib(type=int, converter=int)
-    n2 = attr.ib(type=int, converter=int)
-    letter = attr.ib(type=str)
-    password = attr.ib(type=str)
+    n1: int
+    n2: int
+    letter: str
+    password: str
 
     @classmethod
     def FromLine(self, line) -> Entry:
@@ -25,8 +26,8 @@ class Entry(object):
         if not match:
             raise ValueError(f"Could not parse line '{line}'")
         return Entry(
-            n1=match.group("n1"),
-            n2=match.group("n2"),
+            n1=int(match.group("n1")),
+            n2=int(match.group("n2")),
             letter=match.group("letter"),
             password=match.group("password"),
         )
