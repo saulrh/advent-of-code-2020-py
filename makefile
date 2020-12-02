@@ -4,6 +4,9 @@ fix:
 test:
 	poetry run python -m unittest
 
+setup:
+	poetry run pre-commit install
+
 problem%:
 	date
 	poetry run python -m unittest tests/test_$@.py
