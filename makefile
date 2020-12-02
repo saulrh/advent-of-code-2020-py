@@ -15,8 +15,8 @@ flake8:
 isort:
 	poetry run isort --atomic .
 
-problem01:
+problem%:
 	date
-	poetry run python -m unittest tests/test_problem01.py
-	poetry run python -m advent_of_code_2020_py.problem01
+	poetry run python -m unittest tests/test_$@.py
+	poetry run python -m advent_of_code_2020_py.$@
 
