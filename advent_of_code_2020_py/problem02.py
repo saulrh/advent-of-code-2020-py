@@ -1,17 +1,35 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
 import collections
-import dataclasses
+import attr
 import re
 from typing import List
 
 
-@dataclasses.dataclass
+_LINE_PARSE_REG = re.compile(
+    r"(?P<n1>\d+)-(?P<n2>\d+) (?P<letter>\S): (?P<password>.+)"
+)
+
+
+@attr.s()
 class Entry(object):
-    n1: int
-    n2: int
-    letter: str
-    password: str
+    n1 = attr.ib(type=int, converter=int)
+    n2 = attr.ib(type=int, converter=int)
+    letter = attr.ib(type=str)
+    password = attr.ib(type=str)
+
+    @classmethod
+    def Parse(self, line) -> Entry:
+        match = _LINE_PARSE_REG.fullmatch(line.strip())
+        if not match:
+            raise ValueError(f"Could not parse line '{line}'")
+        return Entry(
+            n1=match.group("n1"),
+            n2=match.group("n2"),
+            letter=match.group("letter"),
+            password=match.group("password"),
+        )
 
     def Part1Valid(self):
         counts = collections.Counter(self.password)
@@ -23,26 +41,9 @@ class Entry(object):
         return l1 != l2
 
 
-LINE_PARSE_REG = re.compile(
-    r"(?P<n1>\d+)-(?P<n2>\d+) (?P<letter>\S): (?P<password>.+)"
-)
-
-
-def ParseEntry(line: str) -> Entry:
-    match = LINE_PARSE_REG.fullmatch(line.strip())
-    if not match:
-        raise ValueError(f"Could not parse line '{line}'")
-    return Entry(
-        n1=int(match.group("n1")),
-        n2=int(match.group("n2")),
-        letter=match.group("letter"),
-        password=match.group("password"),
-    )
-
-
 def get_data() -> List[Entry]:
     with open("inputs/problem02.part1.csv", "r") as f:
-        return [ParseEntry(line) for line in f]
+        return [Entry.Parse(line) for line in f]
 
 
 def part1():

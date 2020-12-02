@@ -11,7 +11,7 @@ EXAMPLE_DATA = [
 
 class Test02(unittest.TestCase):
     def test_parsing(self):
-        data = [problem02.ParseEntry(e) for e in EXAMPLE_DATA]
+        data = [problem02.Entry.Parse(e) for e in EXAMPLE_DATA]
         self.assertEqual(data[0].n1, 1)
         self.assertEqual(data[0].n2, 3)
         self.assertEqual(data[0].letter, "a")
@@ -26,13 +26,13 @@ class Test02(unittest.TestCase):
         self.assertEqual(data[2].password, "ccccccccc")
 
     def test_example_part1(self):
-        data = [problem02.ParseEntry(e) for e in EXAMPLE_DATA]
+        data = [problem02.Entry.Parse(e) for e in EXAMPLE_DATA]
         self.assertTrue(data[0].Part1Valid())
         self.assertFalse(data[1].Part1Valid())
         self.assertTrue(data[2].Part1Valid())
 
     def test_example_part2(self):
-        data = [problem02.ParseEntry(e) for e in EXAMPLE_DATA]
+        data = [problem02.Entry.Parse(e) for e in EXAMPLE_DATA]
         self.assertTrue(data[0].Part2Valid())
         self.assertFalse(data[1].Part2Valid())
         self.assertFalse(data[2].Part2Valid())
