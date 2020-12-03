@@ -1,5 +1,7 @@
 import unittest
 
+from advent_of_code_2020_py import grid
+from advent_of_code_2020_py import linalg
 from advent_of_code_2020_py import problem03
 
 DATA = """..##.......
@@ -20,7 +22,7 @@ class Test01(unittest.TestCase):
     def test_example1(self):
         self.assertEqual(
             problem03.CountTrees(
-                problem03.Map.FromString(DATA), problem03.Slope(over=3, down=1)
+                grid.Grid.FromString(DATA), linalg.Slope(over=3, down=1)
             ),
             7,
         )
