@@ -29,3 +29,24 @@ class Point(object):
             raise NotImplementedError(
                 f"__add__ not implemented for Point and {type(other).name}"
             )
+
+    def __sub__(self, other) -> Point:
+        if isinstance(other, Point):
+            return self + (other * -1)
+        elif isinstance(other, Slope):
+            return self + Slope(over=other.over * -1, down=other.down * -1)
+        else:
+            raise NotImplementedError(
+                f"__sub__ not implemented for Point and {type(other).name}"
+            )
+
+    def __mul__(self, other) -> Point:
+        if isinstance(other, int):
+            return Point(
+                col=self.col * other,
+                row=self.row * other,
+            )
+        else:
+            raise NotImplementedError(
+                f"__mul__ not implemented for Point and {type(other).name}"
+            )
