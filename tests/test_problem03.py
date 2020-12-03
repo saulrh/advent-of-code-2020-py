@@ -18,9 +18,11 @@ DATA = """..##.......
 
 class Test01(unittest.TestCase):
     def test_example1(self):
-        hill = problem03.Map.FromString(DATA)
         self.assertEqual(
-            problem03.CountTrees(hill, problem03.Slope(over=3, down=1)), 7
+            problem03.CountTrees(
+                problem03.Map.FromString(DATA), problem03.Slope(over=3, down=1)
+            ),
+            7,
         )
 
 
