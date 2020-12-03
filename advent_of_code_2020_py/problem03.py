@@ -20,13 +20,24 @@ def CountTrees(hill: grid.Grid, slope: linalg.Slope) -> int:
     return trees_hit
 
 
+WRAP_RIGHT = {
+    grid.Side.RIGHT.AD(): grid.BoundaryBehavior.WRAP,
+}
+
+
 def part1():
-    hill = problem.GetRaw(3, grid.Grid.FromString)
+    hill = grid.Grid.FromString(
+        problem.GetRaw(3),
+        WRAP_RIGHT,
+    )
     print(CountTrees(hill, linalg.Slope(over=3, down=1)))
 
 
 def part2():
-    hill = problem.GetRaw(3, grid.Grid.FromString)
+    hill = grid.Grid.FromString(
+        problem.GetRaw(3),
+        WRAP_RIGHT,
+    )
     slopes = [
         linalg.Slope(over=1, down=1),
         linalg.Slope(over=3, down=1),
