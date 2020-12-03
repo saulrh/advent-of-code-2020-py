@@ -18,13 +18,34 @@ class Tile(enum.Enum):
 
     @classmethod
     def FromChar(cls, char: str) -> Tile:
-        return Tile.SNOW if char == "." else Tile.TREE
+        if char == ".":
+            return Tile.SNOW
+        elif char == "#":
+            return Tile.TREE
+        else:
+            raise ValueError(f"Invalid character {char} in map")
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Point(object):
     row: int
     col: int
+
+    def __add__(self, other) -> Point:
+        if isinstance(other, Point):
+            return Point(
+                row=self.row + other.row,
+                col=self.col + other.col,
+            )
+        elif isinstance(other, Slope):
+            return Point(
+                row=self.row + other.down,
+                col=self.col + other.over,
+            )
+        else:
+            raise NotImplementedError(
+                f"__add__ not implemented for Point and {type(other).name}"
+            )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -65,13 +86,9 @@ def CountTrees(hill: Map, slope: Slope) -> int:
     trees_hit = 0
     pt = Point(0, 0)
     while pt.row < hill.rows:
-        t = hill.Get(pt)
-        if t == Tile.TREE:
+        if hill.Get(pt) == Tile.TREE:
             trees_hit += 1
-        pt = Point(
-            row=pt.row + slope.down,
-            col=pt.col + slope.over,
-        )
+        pt += slope
     return trees_hit
 
 
