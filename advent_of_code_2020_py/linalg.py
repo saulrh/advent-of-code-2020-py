@@ -40,13 +40,8 @@ class Point(object):
                 f"__sub__ not implemented for Point and {type(other).name}"
             )
 
-    def __mul__(self, other) -> Point:
-        if isinstance(other, int):
-            return Point(
-                col=self.col * other,
-                row=self.row * other,
-            )
-        else:
-            raise NotImplementedError(
-                f"__mul__ not implemented for Point and {type(other).name}"
-            )
+    def __mul__(self, other: int) -> Point:
+        return Point(
+            col=self.col * other,
+            row=self.row * other,
+        )
