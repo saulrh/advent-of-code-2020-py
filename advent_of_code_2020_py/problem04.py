@@ -120,6 +120,7 @@ class Passport(object):
             and self.hcl_valid
             and self.ecl_valid
             and self.pid_valid
+            and self.cid_valid
         )
 
 
