@@ -6,10 +6,11 @@ import more_itertools
 
 from advent_of_code_2020_py import problem
 
+_TRANSLATE = str.maketrans({"F": "0", "B": "1", "L": "0", "R": "1"})
+
 
 def SeatID(s: str) -> int:
-    trans = str.maketrans({"F": "0", "B": "1", "L": "0", "R": "1"})
-    return int(s.translate(trans), 2)
+    return int(s.translate(_TRANSLATE), 2)
 
 
 def part1():
