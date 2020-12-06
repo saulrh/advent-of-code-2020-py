@@ -2,42 +2,38 @@
 
 from __future__ import annotations
 
+import functools
 from typing import Iterable, Set
 
 from advent_of_code_2020_py import problem
 
-
-def ParseFilePart1(lines: Iterable[str]) -> Iterable[Set[str]]:
-    working = set()
-    for line in lines:
-        line = line.strip()
-        if not line:
-            yield working
-            working = set()
-        working.update(line)
-    yield working
+LETTERS = {chr(i) for i in range(ord("a"), ord("z") + 1)}
 
 
-def ParseFilePart2(lines: Iterable[str]) -> Iterable[Set[str]]:
-    working = None
-    for line in lines:
-        line = line.strip()
-        if not line:
-            yield working or set()
-            working = None
-        elif working is None:
-            working = set(line)
-        else:
-            working &= set(line)
-    yield working or set()
+def Part1Batch(group: Iterable[Set[str]]) -> Set[str]:
+    return functools.reduce(set.union, group, set())
+
+
+def Part2Batch(group: Iterable[Set[str]]) -> Set[str]:
+    return functools.reduce(set.intersection, group, set(LETTERS))
 
 
 def part1():
-    print(sum(len(s) for s in ParseFilePart1(problem.Get(6))))
+    groups = problem.GetBatches(
+        problem_number=6,
+        line_transform=set,
+        batch_transform=Part1Batch,
+    )
+    print(sum(len(g) for g in groups))
 
 
 def part2():
-    print(sum(len(s) for s in ParseFilePart2(problem.Get(6))))
+    groups = problem.GetBatches(
+        problem_number=6,
+        line_transform=set,
+        batch_transform=Part2Batch,
+    )
+    print(sum(len(g) for g in groups))
 
 
 if __name__ == "__main__":
