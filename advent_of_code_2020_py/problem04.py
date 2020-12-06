@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Iterable
+from typing import Iterable, Mapping
 
 import attr
 
@@ -124,28 +124,24 @@ class Passport(object):
         )
 
 
-def ParseFile(lines: Iterable[str]) -> Iterable[Passport]:
-    working = Passport()
-    for line in lines:
-        words = line.strip().split()
-        if not words:
-            yield working
-            working = Passport()
-        for word in words:
-            tag, value = word.split(":")
-            working.__setattr__(tag, value)
-    yield working
+def LineTransform(line: str) -> Mapping[str, str]:
+    return dict(word.split(":") for word in line.split())
+
+
+def BatchTransform(group: Iterable[Mapping[str, str]]) -> Passport:
+    fields = {}
+    for partial in group:
+        fields.update(partial)
+    return Passport(**fields)
 
 
 def part1():
-    batch = problem.GetRaw(4)
-    passports = list(ParseFile(batch.splitlines()))
+    passports = problem.GetBatches(4, LineTransform, BatchTransform)
     print(sum(p.Part1Valid for p in passports))
 
 
 def part2():
-    batch = problem.GetRaw(4)
-    passports = list(ParseFile(batch.splitlines()))
+    passports = problem.GetBatches(4, LineTransform, BatchTransform)
     print(sum(p.Part2Valid for p in passports))
 
 

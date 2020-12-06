@@ -1,5 +1,6 @@
 import unittest
 
+from advent_of_code_2020_py import problem
 from advent_of_code_2020_py import problem04
 
 DATA_1 = """ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
@@ -49,18 +50,30 @@ iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
 
 class Test01(unittest.TestCase):
     def test_example1(self):
-        passports = problem04.ParseFile(DATA_1.splitlines())
+        passports = problem.InBatches(
+            DATA_1.splitlines(),
+            problem04.LineTransform,
+            problem04.BatchTransform,
+        )
         self.assertEqual(
             [p.Part1Valid for p in passports], [True, False, True, False]
         )
 
     def test_example2(self):
-        invalids = problem04.ParseFile(INVALID_PASSPORTS.splitlines())
+        invalids = problem.InBatches(
+            INVALID_PASSPORTS.splitlines(),
+            problem04.LineTransform,
+            problem04.BatchTransform,
+        )
         self.assertEqual([p.Part2Valid for p in invalids], [False] * 4)
 
     def test_example3(self):
-        invalids = problem04.ParseFile(VALID_PASSPORTS.splitlines())
-        self.assertEqual([p.Part2Valid for p in invalids], [True] * 4)
+        valids = problem.InBatches(
+            VALID_PASSPORTS.splitlines(),
+            problem04.LineTransform,
+            problem04.BatchTransform,
+        )
+        self.assertEqual([p.Part2Valid for p in valids], [True] * 4)
 
 
 if __name__ == "__main__":
