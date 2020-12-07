@@ -5,7 +5,7 @@ test:
 	poetry run python -m unittest
 
 setup:
-	pip install --user poetry
+	pip3 install --user poetry
 	poetry install
 	poetry run pre-commit install
 
