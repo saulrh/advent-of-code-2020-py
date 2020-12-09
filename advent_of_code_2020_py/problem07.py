@@ -27,10 +27,9 @@ LINE_RE = regex.compile(
         # prefix/suffix on the child-bag statement (space, "bags,")
         + (
             "(?:"
-            +
             # Option 1: "no other". Non-capturing because the absence
             # of captures is all we need.
-            "(?:no other)"
+            + "(?:no other)"
             + "|"
             # Option 2: capture the count (a series of digits) and the
             # color (a series of digits).
