@@ -97,7 +97,7 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 name = "decorator"
 version = "4.4.2"
 description = "Decorators for Humans"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 
@@ -280,7 +280,7 @@ python-versions = "*"
 name = "networkx"
 version = "2.5"
 description = "Python package for creating and manipulating graphs and networks"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -546,7 +546,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<3.9"
-content-hash = "aef315d1ab8d9547c0a9046da8b187dae323554b0976aaadaa6f3868cc7a4195"
+content-hash = "a12ed57f2d8969218ebfccd3f265ea26acb6bb8b1a5ff7e97ff77c12804a2cc1"
 
 [metadata.files]
 appdirs = [
