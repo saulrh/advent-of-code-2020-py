@@ -21,6 +21,14 @@ class TestPoint(unittest.TestCase):
         self.assertEqual(linalg.Point(1, 2) * 2, linalg.Point(2, 4))
         self.assertEqual(linalg.Point(1, 2) * -2, linalg.Point(-2, -4))
 
+    def test_Rotate(self):
+        self.assertEqual(
+            linalg.Point(1, 2).RotateClockwise(90), linalg.Point(-2, 1)
+        )
+        self.assertEqual(
+            linalg.Point(1, 2).RotateClockwise(-90), linalg.Point(2, -1)
+        )
+
 
 class TestSlope(unittest.TestCase):
     def test_CanAddToPoint(self):

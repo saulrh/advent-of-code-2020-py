@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import attr
 
 
@@ -44,4 +46,20 @@ class Point(object):
         return Point(
             col=self.col * other,
             row=self.row * other,
+        )
+
+    def RotateClockwise(self, theta: int) -> Point:
+        return Point(
+            col=int(
+                round(
+                    self.col * math.cos(math.radians(theta))
+                    - self.row * math.sin(math.radians(theta))
+                )
+            ),
+            row=int(
+                round(
+                    self.col * math.sin(math.radians(theta))
+                    + self.row * math.cos(math.radians(theta))
+                )
+            ),
         )
