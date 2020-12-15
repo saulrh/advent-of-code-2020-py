@@ -8,8 +8,12 @@ setup:
 	pip3 install --user poetry
 	poetry install
 	poetry run pre-commit install
+	poetry run ipython profile create --ProfileDir.location=./.ipython_profile
 
 problem%:
 	date
 	poetry run python -m unittest tests/test_$@.py
 	poetry run python -m advent_of_code_2020_py.$@
+
+ipython:
+	poetry run ipython --ProfileDir.location=./.ipython_profile
