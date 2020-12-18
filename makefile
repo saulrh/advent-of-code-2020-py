@@ -1,19 +1,23 @@
+RUN = poetry run
+
+.PHONY: fix test setup problem% ipython
+
 fix:
-	poetry run pre-commit run --all-files
+	$(RUN) pre-commit run --all-files
 
 test:
-	poetry run python -m unittest
+	$(RUN) python -m unittest
 
 setup:
 	pip3 install --user poetry
 	poetry install
-	poetry run pre-commit install
-	poetry run ipython profile create --ProfileDir.location=./.ipython_profile
+	$(RUN) pre-commit install
+	$(RUN) ipython profile create --ProfileDir.location=./.ipython_profile
 
 problem%:
 	date
-	poetry run python -m unittest tests/test_$@.py
-	poetry run python -m advent_of_code_2020_py.$@
+	$(RUN) python -m unittest tests/test_$@.py
+	$(RUN) python -m advent_of_code_2020_py.$@
 
 ipython:
-	poetry run ipython --ProfileDir.location=./.ipython_profile
+	$(RUN) ipython --ProfileDir.location=./.ipython_profile
