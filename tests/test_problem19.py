@@ -75,5 +75,7 @@ class Test01(unittest.TestCase):
         ps = problem19.ProblemStatement.FromStr(EXAMPLE_2)
         self.assertEqual(sum(ps.TestMessage(m) for m in ps.messages), 3)
 
-        ps2 = problem19.ProblemStatement.FromStr2(EXAMPLE_2)
+        ps2 = problem19.ProblemStatement.FromStr(
+            problem19.RewriteForPart2(EXAMPLE_2)
+        )
         self.assertEqual(sum(ps2.TestMessage(m) for m in ps.messages), 12)

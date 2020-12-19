@@ -14,19 +14,16 @@ from advent_of_code_2020_py import problem
 
 
 def RewriteToGrammar(inp: str) -> str:
-    inp = "\n".join(sorted(inp.splitlines()))
-    inp = (
-        inp.replace("|", ") / (").replace(":", " = (").replace("\n", " )\n")
-    ) + " )\n"
-    return regex.sub(r"\d+", lambda m: "r" + m.group(), inp)
+    def RewriteLine(line):
+        line = line.replace(":", " = (").replace("|", ") / (") + " )"
+        return regex.sub(r"\d+", lambda m: "r" + m.group().zfill(6), line)
+
+    return "\n".join(sorted(RewriteLine(line) for line in inp.splitlines()))
 
 
-def RewriteToGrammar2(inp: str) -> str:
-    return (
-        RewriteToGrammar(inp)
-        .replace("r8 = ( r42 )\n", "r8 = r42 / ( r42 r8 )\n")
-        .replace("r11 = ( r42 r31 )\n", "r11 = ( r42 r31) / ( r42 r11 r31 )\n")
-    )
+def RewriteForPart2(inp: str) -> str:
+    inp = inp.replace("8: 42", "8: 42 | 42 8")
+    return inp.replace("11: 42 31", "11: 42 11? 31")
 
 
 @attr.s(auto_attribs=True)
@@ -38,16 +35,6 @@ class ProblemStatement(object):
     def FromStr(cls, inp: str) -> ProblemStatement:
         head, tail = inp.split("\n\n")
         rewritten = RewriteToGrammar(head)
-        return cls(
-            g=grammar.Grammar(rewritten),
-            messages=[m.strip() for m in tail.splitlines()],
-        )
-
-    @classmethod
-    def FromStr2(cls, inp: str) -> ProblemStatement:
-        head, tail = inp.split("\n\n")
-        rewritten = RewriteToGrammar2(head)
-        debug.console.log(rewritten)
         return cls(
             g=grammar.Grammar(rewritten),
             messages=[m.strip() for m in tail.splitlines()],
@@ -69,7 +56,7 @@ def part1():
 
 def part2():
     debug.console.rule("[bold red]Part 2")
-    ps = ProblemStatement.FromStr2(problem.GetRaw(19))
+    ps = ProblemStatement.FromStr(RewriteForPart2(problem.GetRaw(19)))
     debug.console.log(sum(ps.TestMessage(m) for m in ps.messages))
 
 
