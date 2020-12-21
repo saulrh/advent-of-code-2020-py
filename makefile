@@ -6,7 +6,7 @@ fix:
 	$(RUN) pre-commit run --all-files
 
 test:
-	$(RUN) python -m unittest
+	$(RUN) python -m unittest $(TESTS)
 
 setup:
 	pip3 install --user poetry
@@ -16,7 +16,7 @@ setup:
 
 problem%:
 	date
-	$(RUN) python -m unittest tests/test_$@.py
+	$(RUN) python -m unittest tests.test_$@
 	$(RUN) python -m advent_of_code_2020_py.$@
 
 ipython:
