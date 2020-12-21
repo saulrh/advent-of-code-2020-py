@@ -23,10 +23,10 @@ class TestPoint(unittest.TestCase):
 
     def test_Rotate(self):
         self.assertEqual(
-            linalg.Point(1, 2).RotateClockwise(90), linalg.Point(-2, 1)
+            linalg.Point(1, 2).RotateClockwise(90), linalg.Point(2, -1)
         )
         self.assertEqual(
-            linalg.Point(1, 2).RotateClockwise(-90), linalg.Point(2, -1)
+            linalg.Point(1, 2).RotateClockwise(-90), linalg.Point(-2, 1)
         )
 
 
