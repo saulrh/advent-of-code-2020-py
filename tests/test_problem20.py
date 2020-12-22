@@ -3,9 +3,6 @@ import itertools
 import operator
 import unittest
 
-from rich import table
-
-from advent_of_code_2020_py import debug
 from advent_of_code_2020_py import problem20
 
 EXAMPLE_1 = """Tile 2311:
@@ -117,6 +114,32 @@ Tile 3079:
 ..#.###...
 """
 
+STITCHED = """.#.#..#.##...#.##..#####
+###....#.#....#..#......
+##.##.###.#.#..######...
+###.#####...#.#####.#..#
+##.#....#.##.####...#.##
+...########.#....#####.#
+....#..#...##..#.#.###..
+.####...#..#.....#......
+#..#.##..#..###.#.##....
+#.####..#.####.#.#.###..
+###.#.#...#.######.#..##
+#.####....##..########.#
+##..##.#...#...#.#.#.#..
+...#..#..#.#.##..###.###
+.#.#....#.##.#...###.##.
+###.#...#..#.##.######..
+.#.#.###.##.##.#..#.##..
+.####.###.#...###.#..#.#
+..#.#..#..#.#.#.####.###
+#..####...#.#.#.###.###.
+#####..#####...###....##
+#.##..#..#...#..####...#
+.#.###..##..##..####.##.
+...###...##...#...#..###
+"""
+
 
 class Test20(unittest.TestCase):
     def assertEdgesEqual(self, a, b):
@@ -138,31 +161,36 @@ class Test20(unittest.TestCase):
     def test_GetItem(self):
         tiles = {t.tile_id: t for t in problem20.FromStr(EXAMPLE_1)}
         t = tiles[3079]
-        self.assertTrue(t[0, 0, problem20.Orientation.UP])
-        self.assertFalse(t[0, 1, problem20.Orientation.UP])
-        self.assertTrue(t[0, 2, problem20.Orientation.UP])
-        self.assertFalse(t[1, 0, problem20.Orientation.UP])
-        self.assertFalse(t[2, 0, problem20.Orientation.UP])
-        self.assertTrue(t[3, 0, problem20.Orientation.UP])
+        self.assertTrue(t.Oriented(problem20.Orientation.UP).data[0, 0])
+        self.assertFalse(t.Oriented(problem20.Orientation.UP).data[0, 1])
+        self.assertTrue(t.Oriented(problem20.Orientation.UP).data[0, 2])
+        self.assertFalse(t.Oriented(problem20.Orientation.UP).data[1, 0])
+        self.assertFalse(t.Oriented(problem20.Orientation.UP).data[2, 0])
+        self.assertTrue(t.Oriented(problem20.Orientation.UP).data[3, 0])
 
-        self.assertFalse(t[0, 0, problem20.Orientation.RIGHT])
-        self.assertFalse(t[0, 0, problem20.Orientation.DOWN])
-        self.assertFalse(t[0, 0, problem20.Orientation.LEFT])
-
-        self.assertTrue(t[1, 1, problem20.Orientation.UP])
-        self.assertFalse(t[1, 1, problem20.Orientation.RIGHT])
-        self.assertFalse(t[1, 1, problem20.Orientation.DOWN])
-        self.assertTrue(t[1, 1, problem20.Orientation.LEFT])
-
-        self.assertFalse(t[0, 0, problem20.Orientation.FLIP_UP])
-        self.assertFalse(t[0, 0, problem20.Orientation.FLIP_RIGHT])
-        self.assertFalse(t[0, 0, problem20.Orientation.FLIP_DOWN])
-        self.assertTrue(t[0, 0, problem20.Orientation.FLIP_LEFT])
-
-        self.assertTrue(t[1, 2, problem20.Orientation.FLIP_UP])
-        self.assertFalse(t[1, 2, problem20.Orientation.FLIP_RIGHT])
-        self.assertTrue(t[1, 2, problem20.Orientation.FLIP_DOWN])
-        self.assertFalse(t[1, 2, problem20.Orientation.FLIP_LEFT])
+        self.assertFalse(t.Oriented(problem20.Orientation.RIGHT).data[0, 0])
+        self.assertFalse(t.Oriented(problem20.Orientation.DOWN).data[0, 0])
+        self.assertFalse(t.Oriented(problem20.Orientation.LEFT).data[0, 0])
+        self.assertTrue(t.Oriented(problem20.Orientation.UP).data[1, 1])
+        self.assertFalse(t.Oriented(problem20.Orientation.RIGHT).data[1, 1])
+        self.assertFalse(t.Oriented(problem20.Orientation.DOWN).data[1, 1])
+        self.assertTrue(t.Oriented(problem20.Orientation.LEFT).data[1, 1])
+        self.assertFalse(t.Oriented(problem20.Orientation.FLIP_UP).data[0, 0])
+        self.assertFalse(
+            t.Oriented(problem20.Orientation.FLIP_RIGHT).data[0, 0]
+        )
+        self.assertFalse(
+            t.Oriented(problem20.Orientation.FLIP_DOWN).data[0, 0]
+        )
+        self.assertTrue(t.Oriented(problem20.Orientation.FLIP_LEFT).data[0, 0])
+        self.assertTrue(t.Oriented(problem20.Orientation.FLIP_UP).data[1, 2])
+        self.assertFalse(
+            t.Oriented(problem20.Orientation.FLIP_RIGHT).data[1, 2]
+        )
+        self.assertTrue(t.Oriented(problem20.Orientation.FLIP_DOWN).data[1, 2])
+        self.assertFalse(
+            t.Oriented(problem20.Orientation.FLIP_LEFT).data[1, 2]
+        )
 
     def test_RotationsContiguous(self):
         tiles = {t.tile_id: t for t in problem20.FromStr(EXAMPLE_1)}
@@ -227,18 +255,11 @@ class Test20(unittest.TestCase):
 
         solution = problem20.Solve(tiles)
 
-        t = table.Table(show_lines=True, show_header=False)
-        for r in range(3):
-            t.add_row(*[str(solution[r, c][0]) for c in range(3)])
-        debug.console.log(t)
-
         self.assertEqual(
             len(list(v[0] for v in solution.values())),
             len(set(v[0] for v in solution.values())),
         )
 
-        debug.console.log(solution)
-        debug.console.log(problem20.StitchSolution(tiles, solution))
         self.assertEqual(
             functools.reduce(
                 operator.mul,
@@ -246,3 +267,25 @@ class Test20(unittest.TestCase):
             ),
             20899048083289,
         )
+
+    def test_Stitch(self):
+        tiles = {t.tile_id: t for t in problem20.FromStr(EXAMPLE_1)}
+        solution = problem20.Solve(tiles)
+        stitched = problem20.Stitch(tiles, solution)
+        renders = {
+            str(stitched.Oriented(o)).strip() for o in problem20.Orientation
+        }
+        pretty_renders = "\n\n".join(renders)
+        self.assertIn(
+            STITCHED.strip(),
+            renders,
+            msg=f"Did not find:\n\n{STITCHED}\n\nIN\n\n{pretty_renders}",
+        )
+
+    def test_Example2(self):
+        tiles = {t.tile_id: t for t in problem20.FromStr(EXAMPLE_1)}
+        solution = problem20.Solve(tiles)
+        stitched = problem20.Stitch(tiles, solution)
+        serpent_count = problem20.SerpentCount(stitched)
+        self.assertEqual(serpent_count, 2)
+        self.assertEqual(problem20.Roughness(stitched), 273)

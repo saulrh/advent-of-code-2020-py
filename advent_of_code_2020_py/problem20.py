@@ -11,7 +11,6 @@ import re
 from typing import Dict, Iterable, Iterator, List, Set, Tuple
 
 import attr
-import more_itertools
 import numpy
 
 from advent_of_code_2020_py import debug
@@ -52,6 +51,20 @@ class Orientation(enum.Enum):
             return Orientation(self.value + 4)
 
 
+NORMAL_ORIENTATIONS = [
+    Orientation.UP,
+    Orientation.RIGHT,
+    Orientation.DOWN,
+    Orientation.LEFT,
+]
+FLIPPED_ORIENTATIONS = [
+    Orientation.FLIP_UP,
+    Orientation.FLIP_RIGHT,
+    Orientation.FLIP_DOWN,
+    Orientation.FLIP_LEFT,
+]
+
+
 @enum.unique
 class Side(enum.Enum):
     UP = 0
@@ -73,28 +86,26 @@ class Tile(object):
     def flipped(self) -> Tile:
         return Tile(tile_id=self.tile_id, data=numpy.fliplr(self.data))
 
+    def __eq__(self, other) -> bool:
+        return self.tile_id != other.tile_id
+
     def __str__(self) -> str:
         rows = []
-        for r in self.data:
-            row = []
-            for c in r:
-                row.append("#" if c else ".")
-            rows.append(row)
-        return "\n".join("".join(row) for row in rows)
+        for row in self.data:
+            rows.append("".join("#" if r else "." for r in row))
+        return "\n".join(rows)
 
-    def __getitem__(self, key: Tuple[int, int, Orientation]) -> bool:
-        r, c, o = key
-
+    def Oriented(self, o: Orientation) -> Tile:
         if o == Orientation.UP:
-            return self.data[r, c]
+            return self
         elif o == Orientation.LEFT:
-            return self.rotated90[r, c, Orientation.UP]
+            return self.rotated90.Oriented(Orientation.UP)
         elif o == Orientation.DOWN:
-            return self.rotated90[r, c, Orientation.LEFT]
+            return self.rotated90.Oriented(Orientation.LEFT)
         elif o == Orientation.RIGHT:
-            return self.rotated90[r, c, Orientation.DOWN]
-        if o.value >= 4:
-            return self.flipped[r, c, o.flipped]
+            return self.rotated90.Oriented(Orientation.DOWN)
+        elif o in FLIPPED_ORIENTATIONS:
+            return self.flipped.Oriented(o.flipped)
         else:
             raise ValueError("Unknown orientation")
 
@@ -103,7 +114,9 @@ class Tile(object):
 
     def Edge(self, orientation: Orientation, side: Side) -> Tuple[bool, ...]:
         eps = EdgePoints(self.data.shape[0], side)
-        return tuple(self[pt[0], pt[1], orientation] for pt in eps)
+        return tuple(
+            self.Oriented(orientation).data[pt[0], pt[1]] for pt in eps
+        )
 
     @functools.cached_property
     def all_edge_hashes(self) -> Set[_EdgeHashType]:
@@ -154,40 +167,45 @@ def Solve(
     )
     edge_counts = collections.Counter(all_edges)
     unique_edges = {k for k, v in edge_counts.items() if v == 1}
-    corners = [
-        t for t in tiles.values() if len(t.all_edge_hashes & unique_edges) == 2
-    ]
 
-    # Top-left corner
+    # Find a suitable top-left corner
     solution = {}
-    solution[0, 0] = (corners[0].tile_id, Orientation.UP)
+    for t, o in itertools.product(tiles.values(), Orientation):
+        if (
+            t.EdgeHash(o, Side.LEFT) in unique_edges
+            and t.EdgeHash(o, Side.UP) in unique_edges
+        ):
+            solution[0, 0] = (t.tile_id, o)
+            break
 
     for r, c in itertools.product(range(w), repeat=2):
         if r == 0 and c == 0:
             continue
         elif c == 0:
-            last_tile_id, last_tile_orientation = solution[r - 1, c]
+            last_tile_r, last_tile_c = r - 1, c
             last_tile_side = Side.DOWN
             next_tile_side = Side.UP
         else:
-            last_tile_id, last_tile_orientation = solution[r, c - 1]
+            last_tile_r, last_tile_c = r, c - 1
             last_tile_side = Side.RIGHT
             next_tile_side = Side.LEFT
+        last_tile_id, last_tile_orientation = solution[
+            last_tile_r, last_tile_c
+        ]
         last_tile = tiles[last_tile_id]
-        debug.console.log(f"last tile: {last_tile_id}")
+
         last_edge_hash = last_tile.EdgeHash(
             last_tile_orientation, last_tile_side
         )
-        debug.console.log(f"  last edge: {last_edge_hash} {last_tile_side}")
         for t, o in itertools.product(tiles.values(), Orientation):
-            if t != last_tile and last_edge_hash == t.EdgeHash(
+            if t.tile_id != last_tile_id and last_edge_hash == t.EdgeHash(
                 o, next_tile_side
             ):
                 next_tile, next_tile_orientation = t, o
                 break
-        debug.console.log(
-            f"  next tile: {next_tile.tile_id} {next_tile_orientation}"
-        )
+        assert next_tile.EdgeHash(
+            next_tile_orientation, next_tile_side
+        ) == last_tile.EdgeHash(last_tile_orientation, last_tile_side)
         solution[r, c] = (next_tile.tile_id, next_tile_orientation)
         last_tile = next_tile
         last_tile_orientation = next_tile_orientation
@@ -195,65 +213,88 @@ def Solve(
     return solution
 
 
-def StitchSolution(
+def Stitch(
     tiles: Dict[int, Tile],
     solution: Dict[Tuple[int, int], Tuple[int, Orientation]],
-) -> str:
-    def GetPt(r, c, ir, ic):
-        tile_id, orient = solution[r, c]
-        tile = tiles[tile_id]
-        return tile[ir, ic, orient]
-
+) -> Tile:
     w = int(math.sqrt(len(tiles)))
-    output = {}
-    # Chop off the rightmost column and bottom row of each tile
-    for r, c, ir, ic in itertools.product(
-        range(w), range(w), range(9), range(9)
-    ):
-        output[w * (r * 10 + ir) + (c * 10 + ic)] = GetPt(r, c, ir, ic)
+    grid = numpy.ndarray((w * 8, w * 8), dtype=bool)
+    for r, c in itertools.product(range(w), range(w)):
+        t_id, o = solution[r, c]
+        t = tiles[t_id]
+        grid[r * 8 : ((r + 1) * 8), c * 8 : ((c + 1) * 8)] = t.Oriented(
+            o
+        ).data[1:9, 1:9]
+    return Tile(
+        tile_id=hash(tuple(grid.flat)),
+        data=grid,
+    )
 
-    # populate the rightmost column
-    c = w - 1
-    ic = 9
-    for r, ir in itertools.product(range(w), range(9)):
-        output[w * (r * 10 + ir) + (c * 10 + ic)] = GetPt(r, c, ir, ic)
 
-    # populate the bottom row
-    r = w - 1
-    ir = 9
-    for c, ic in itertools.product(range(w), range(9)):
-        output[w * (r * 10 + ir) + (c * 10 + ic)] = GetPt(r, c, ir, ic)
+SERPENT_STR = """                  #
+#    ##    ##    ###
+ #  #  #  #  #  #
+"""
 
-    # populate the bottom-right corner
-    r = w - 1
-    ir = 9
-    c = w - 1
-    ic = 9
-    output[w * (r * 10 + ir) + (c * 10 + ic)] = GetPt(r, c, ir, ic)
 
-    output_list = [None] * len(output)
-    for idx, value in output.items():
-        output_list[idx] = value
-    rows = []
-    for row in more_itertools.chunked(output_list, w * 9):
-        rows.append("".join("X" if r else " " for r in row))
-    return "\n".join(rows)
+def OverlappingIntersections(
+    needle: str, haystack: str
+) -> Iterator[Tuple[int, int]]:
+    hay_w = len(haystack.splitlines()[0])
+    needle_w = len(needle.splitlines()[0])
+    needle_fill = "." * (hay_w - needle_w)
+    flat_needle = "".join(line + needle_fill for line in needle.splitlines())
+    flat_haystack = haystack.replace("\n", "")
+    for idx in range(0, len(flat_haystack) - len(flat_needle)):
+        if all(
+            h == "#"
+            for n, h in zip(flat_needle, flat_haystack[idx:])
+            if n == "#"
+        ):
+            yield int(idx / hay_w), int(idx % hay_w)
+
+
+def SerpentCount(t: Tile) -> int:
+    for o in Orientation:
+        found = list(
+            OverlappingIntersections(
+                needle=SERPENT_STR,
+                haystack=str(t.Oriented(o)),
+            )
+        )
+        if found:
+            return len(found)
+    raise RuntimeError("Found no serpents")
+
+
+def Roughness(t: Tile) -> int:
+    serpents = SerpentCount(t)
+    waves = sum(c == "#" for c in str(t))
+    serpent_size = sum(c == "#" for c in SERPENT_STR)
+    return waves - (serpent_size * serpents)
 
 
 def part1():
     debug.console.rule("[bold red]Part 1")
-    tiles = list(FromStr(problem.GetRaw(20)))
-    debug.console.log(tiles)
-    # debug.console.log(functools.reduce(
-    #     operator.mul,
-    #     (t.tile_id for t in tiles_with_two_unique_edges)))
-    # debug.console.log(collections.Counter(edge_counts.values()))
+    tiles = {t.tile_id: t for t in FromStr(problem.GetRaw(20))}
+    solution = Solve(tiles)
+    debug.console.log(
+        solution[0, 0][0]
+        * solution[0, 11][0]
+        * solution[11, 0][0]
+        * solution[11, 11][0]
+    )
 
 
 def part2():
     debug.console.rule("[bold red]Part 2")
+    tiles = {t.tile_id: t for t in FromStr(problem.GetRaw(20))}
+    solution = Solve(tiles)
+    stitched = Stitch(tiles, solution)
+    debug.console.log(Roughness(stitched))
 
 
 if __name__ == "__main__":
     part1()
     part2()
+    debug.console.rule("[bold red]Done")
