@@ -12,3 +12,9 @@ class Test20(unittest.TestCase):
 
     def test_Example1Door(self):
         self.assertEqual(problem25.Reverse(EXAMPLE_1_DOOR, 7), 11)
+
+    def test_Forward(self):
+        self.assertEqual(
+            problem25.Forward(8, EXAMPLE_1_DOOR),
+            problem25.Forward(11, EXAMPLE_1_CARD),
+        )

@@ -2,33 +2,27 @@
 
 from __future__ import annotations
 
-import multiprocessing
-from typing import Tuple
-
 from advent_of_code_2020_py import debug
 from advent_of_code_2020_py import problem
+
+CONSTANT = 20201227
 
 
 def Forward(loop_size: int, subject: int) -> int:
     value = 1
     for _ in range(loop_size):
         value *= subject
-        value %= 20201227
+        value %= CONSTANT
     return value
 
 
-def Test(args: Tuple[int, int, int]) -> Tuple[int, int]:
-    subject, public, loop_size = args
-    return loop_size, Forward(loop_size, subject) == public
-
-
 def Reverse(public: int, subject: int) -> int:
-    with multiprocessing.Pool(10) as p:
-        for ls, success in p.imap_unordered(
-            Test, ((subject, public, ls) for ls in range(1000000000))
-        ):
-            if success:
-                return ls
+    value = 1
+    for loop_size in range(1, 1000000000):
+        value *= subject
+        value %= CONSTANT
+        if value == public:
+            return loop_size
     raise ValueError(f"Did not find the loop size for public key {public}")
 
 
