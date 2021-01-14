@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
+import dataclasses
 import itertools
 from typing import Dict, Iterable, Iterator
-
-import attr
 
 from advent_of_code_2020_py import debug
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class Buffer(object):
     head: Node
     nodes: Dict[int, Node]
@@ -18,17 +17,16 @@ class Buffer(object):
 
     @classmethod
     def Build(cls, numbers: Iterable[int]):
-        prv = None
-        largest = -1
-        head = None
+        it = iter(numbers)
+        n = next(it)
+        head = Node.Create(car=n)
         nodes = {}
-        for n in numbers:
-            if head is None:
-                node = Node(car=n)
-                head = node
-            else:
-                node = Node(car=n, nxt=head, prv=prv)
-                prv.nxt = node
+        nodes[n] = head
+        largest = n
+        prv = head
+        for n in it:
+            node = Node(car=n, nxt=head, prv=prv)
+            prv.nxt = node
             nodes[n] = node
             largest = max(n, largest)
             prv = node
@@ -67,11 +65,18 @@ class Buffer(object):
         # after_head ... dest -> held1 ... held3 -> after_dest ... tail -> head
 
 
-@attr.s(auto_attribs=True, eq=False)
+@dataclasses.dataclass(eq=False)
 class Node(object):
     car: int
-    nxt: "Node" = attr.ib(factory=lambda self: self)
-    prv: "Node" = attr.ib(factory=lambda self: self)
+    nxt: "Node"
+    prv: "Node"
+
+    @classmethod
+    def Create(cls, car: int):
+        n = cls(car, prv=None, nxt=None)  # type: ignore
+        n.prv = n
+        n.nxt = n
+        return n
 
     def SetNxt(self, other):
         self.nxt = other

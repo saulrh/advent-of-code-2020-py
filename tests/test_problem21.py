@@ -11,7 +11,7 @@ sqjhc mxmxvkd sbzzf (contains fish)
 """
 
 
-class Test20(unittest.TestCase):
+class Test21(unittest.TestCase):
     def test_Example1(self):
         foods = [
             problem21.Food.FromStr(line) for line in EXAMPLE_1.splitlines()

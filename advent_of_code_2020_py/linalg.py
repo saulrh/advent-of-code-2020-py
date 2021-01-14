@@ -1,17 +1,16 @@
 from __future__ import annotations
 
+import dataclasses
 import math
 
-import attr
 
-
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Slope(object):
     over: int
     down: int
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Point(object):
     row: int
     col: int

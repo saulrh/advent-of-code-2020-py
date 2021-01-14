@@ -66,7 +66,7 @@ aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba
 """
 
 
-class Test01(unittest.TestCase):
+class Test19(unittest.TestCase):
     def test_Example1(self):
         ps = problem19.ProblemStatement.FromStr(EXAMPLE_1)
         self.assertEqual(sum(ps.TestMessage(m) for m in ps.messages), 2)

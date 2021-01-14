@@ -30,7 +30,7 @@ nearby tickets:
 """
 
 
-class Test01(unittest.TestCase):
+class Test16(unittest.TestCase):
     def test_Parse(self):
         p = problem16.Parse(DATA_1.splitlines())
         self.assertEqual(

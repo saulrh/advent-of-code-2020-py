@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
+import dataclasses
 import re
-
-import attr
 
 from advent_of_code_2020_py import problem
 
@@ -13,7 +12,7 @@ _LINE_PARSE_REG = re.compile(
 )
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Entry(object):
     n1: int
     n2: int

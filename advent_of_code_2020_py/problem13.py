@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
+import dataclasses
 import itertools
 from typing import List, Tuple
-
-import attr
 
 from advent_of_code_2020_py import problem
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Bus(object):
     idx: int
     period: int
@@ -52,7 +51,7 @@ def part1():
 
 
 def part2():
-    t, buses = ParseInput(problem.GetRaw(13))
+    _, buses = ParseInput(problem.GetRaw(13))
     print(SolvePart2(buses))
 
 

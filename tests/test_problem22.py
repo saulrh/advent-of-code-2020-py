@@ -28,7 +28,7 @@ Player 2:
 """
 
 
-class Test20(unittest.TestCase):
+class Test22(unittest.TestCase):
     def test_Example1(self):
         state = problem22.State.FromStr(EXAMPLE_1)
         state.Run(False)

@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 import copy
+import dataclasses
 import itertools
 import re
 from typing import Dict, Iterable, Iterator, List, Sequence, Tuple
-
-import attr
 
 from advent_of_code_2020_py import debug
 from advent_of_code_2020_py import problem
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Rule(object):
     field: str
 
@@ -36,11 +35,11 @@ class Rule(object):
         )
 
 
-@attr.s
+@dataclasses.dataclass
 class ProblemStatement(object):
-    rules: List[Rule] = attr.ib(factory=list)
-    your_ticket: List[int] = attr.ib(factory=list)
-    tickets: List[List[int]] = attr.ib(factory=list)
+    rules: List[Rule] = dataclasses.field(default_factory=list)
+    your_ticket: List[int] = dataclasses.field(default_factory=list)
+    tickets: List[List[int]] = dataclasses.field(default_factory=list)
 
     def GetRule(self, field: str) -> Rule:
         return next(r for r in self.rules if r.field == field)

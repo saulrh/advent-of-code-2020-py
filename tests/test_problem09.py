@@ -24,7 +24,7 @@ DATA_1 = """35
 576"""
 
 
-class Test01(unittest.TestCase):
+class Test09(unittest.TestCase):
     def test_Example1(self):
         data = [int(d) for d in DATA_1.splitlines()]
         self.assertEqual(data[problem09.FindFirstInvalidIdx(data, 5)], 127)

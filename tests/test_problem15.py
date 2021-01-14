@@ -6,7 +6,7 @@ from advent_of_code_2020_py import problem15
 DATA_1 = """0,3,6"""
 
 
-class Test01(unittest.TestCase):
+class Test15(unittest.TestCase):
     def test_Memory1(self):
         starting = problem15.Parse(DATA_1)
         self.assertEqual(

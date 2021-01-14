@@ -3,7 +3,7 @@ import unittest
 from advent_of_code_2020_py import problem18
 
 
-class Test01(unittest.TestCase):
+class Test18(unittest.TestCase):
     def test_Part1Example1(self):
         self.assertEqual(problem18.Compute1("1 + 2 * 3 + 4 * 5 + 6"), 71)
 

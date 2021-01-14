@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
+import dataclasses
 import enum
 import re
 from typing import List
 
-import attr
 
-
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class State(object):
     accumulator: int = 0
     next_instruction: int = 0
@@ -23,7 +22,7 @@ class Operation(enum.Enum):
     NOP = enum.auto()
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Instruction(object):
     operation: Operation
     argument: int

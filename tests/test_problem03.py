@@ -18,7 +18,7 @@ DATA = """..##.......
 """
 
 
-class Test01(unittest.TestCase):
+class Test03(unittest.TestCase):
     def test_example1(self):
         self.assertEqual(
             problem03.CountTrees(

@@ -25,7 +25,7 @@ wseweeenwnesenwwwswnew
 """
 
 
-class Test20(unittest.TestCase):
+class Test24(unittest.TestCase):
     def test_Example1(self):
         flips = (problem24.Movement(line) for line in EXAMPLE_1.splitlines())
         tiles = problem24.InitialTiles(flips)

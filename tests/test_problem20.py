@@ -282,10 +282,14 @@ class Test20(unittest.TestCase):
             msg=f"Did not find:\n\n{STITCHED}\n\nIN\n\n{pretty_renders}",
         )
 
-    def test_Example2(self):
+    def test_Example2Serpents(self):
         tiles = {t.tile_id: t for t in problem20.FromStr(EXAMPLE_1)}
         solution = problem20.Solve(tiles)
         stitched = problem20.Stitch(tiles, solution)
-        serpent_count = problem20.SerpentCount(stitched)
-        self.assertEqual(serpent_count, 2)
+        self.assertEqual(problem20.SerpentCount(stitched), 2)
+
+    def test_Example2Roughness(self):
+        tiles = {t.tile_id: t for t in problem20.FromStr(EXAMPLE_1)}
+        solution = problem20.Solve(tiles)
+        stitched = problem20.Stitch(tiles, solution)
         self.assertEqual(problem20.Roughness(stitched), 273)

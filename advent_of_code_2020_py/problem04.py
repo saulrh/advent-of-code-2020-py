@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
+import dataclasses
 import re
-from typing import Iterable, Mapping
-
-import attr
+from typing import Iterable, Mapping, Optional
 
 from advent_of_code_2020_py import problem
 
@@ -14,16 +13,16 @@ HCL_RE = re.compile(r"#[0-9a-f]{6}")
 VALID_ECLS = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class Passport(object):
-    byr: str = None
-    iyr: str = None
-    eyr: str = None
-    hgt: str = None
-    hcl: str = None
-    ecl: str = None
-    pid: str = None
-    cid: str = None
+    byr: Optional[str] = None
+    iyr: Optional[str] = None
+    eyr: Optional[str] = None
+    hgt: Optional[str] = None
+    hcl: Optional[str] = None
+    ecl: Optional[str] = None
+    pid: Optional[str] = None
+    cid: Optional[str] = None
 
     @property
     def byr_valid(self) -> bool:
@@ -93,7 +92,7 @@ class Passport(object):
 
     @property
     def cid_valid(self) -> bool:
-        # don't  even care if it's missing
+        # don't even care if it's missing
         return True
 
     @property
@@ -125,7 +124,7 @@ class Passport(object):
 
 
 def LineTransform(line: str) -> Mapping[str, str]:
-    return dict(word.split(":") for word in line.split())
+    return dict(word.split(":", maxsplit=1) for word in line.split())
 
 
 def BatchTransform(group: Iterable[Mapping[str, str]]) -> Passport:

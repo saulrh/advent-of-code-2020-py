@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import collections
+import dataclasses
 import enum
 import functools
 import itertools
@@ -10,7 +11,6 @@ import math
 import re
 from typing import Dict, Iterable, Iterator, List, Set, Tuple
 
-import attr
 import numpy
 
 from advent_of_code_2020_py import debug
@@ -73,10 +73,12 @@ class Side(enum.Enum):
     LEFT = 3
 
 
-@attr.s()
+@dataclasses.dataclass
 class Tile(object):
-    tile_id: int = attr.ib()
-    data = attr.ib(default=numpy.ndarray(shape=(0, 0), dtype=bool))
+    tile_id: int = dataclasses.field()
+    data: numpy.ndarray = dataclasses.field(
+        default=numpy.ndarray(shape=(0, 0), dtype=bool)
+    )
 
     @functools.cached_property
     def rotated90(self) -> Tile:
@@ -264,7 +266,7 @@ def SerpentCount(t: Tile) -> int:
         )
         if found:
             return len(found)
-    raise RuntimeError("Found no serpents")
+    raise RuntimeError("Found no serpents in any orientation")
 
 
 def Roughness(t: Tile) -> int:

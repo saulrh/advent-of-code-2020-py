@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
+import dataclasses
 import enum
 import re
 from typing import Iterable
-
-import attr
 
 from advent_of_code_2020_py import linalg
 from advent_of_code_2020_py import problem
@@ -38,7 +37,7 @@ class Direction(enum.Enum):
             raise ValueError(f"Invalid direction {self}")
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Ship(object):
     direction: Direction = Direction.EAST
     position: linalg.Point = linalg.Point(0, 0)
@@ -90,7 +89,7 @@ class Ship(object):
         return state
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class WaypointShip(object):
     waypoint: linalg.Point = linalg.Point(row=-1, col=10)
     position: linalg.Point = linalg.Point(0, 0)

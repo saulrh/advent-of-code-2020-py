@@ -2,21 +2,20 @@
 
 from __future__ import annotations
 
+import dataclasses
 import itertools
 from typing import List, Optional, Set
-
-import attr
 
 from advent_of_code_2020_py import debug
 from advent_of_code_2020_py import problem
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class State(object):
     decka: List[int]
     deckb: List[int]
     winner: Optional[str] = None
-    visited: Set[int] = attr.ib(factory=set)
+    visited: Set[int] = dataclasses.field(default_factory=set)
 
     def Step(self, recurse: bool):
         def VictorySimple(a, b):

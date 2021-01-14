@@ -1,10 +1,9 @@
 from __future__ import annotations
 
+import dataclasses
 import enum
 import functools
 from typing import Mapping, Tuple
-
-import attr
 
 from advent_of_code_2020_py import linalg
 
@@ -59,12 +58,10 @@ class Tile(enum.Enum):
             raise ValueError(f"Invalid character {char} in grid")
 
 
-@attr.s(frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Grid(object):
-    tiles: Mapping[linalg.Point, Tile] = attr.ib()
-    boundary_behaviors: Mapping[
-        Tuple[Axis, Direction], BoundaryBehavior
-    ] = attr.ib()
+    tiles: Mapping[linalg.Point, Tile]
+    boundary_behaviors: Mapping[Tuple[Axis, Direction], BoundaryBehavior]
 
     def bound(self, axis: Axis, direction: Direction) -> int:
         if direction == Direction.LOW:
@@ -84,7 +81,7 @@ class Grid(object):
     def rows(self) -> int:
         return 1 + max(pt.row for pt in self.tiles.keys())
 
-    def __attrs_post_init__(self):
+    def __post_init__(self):
         # work around frozen=True as suggested by attrs docs
         object.__setattr__(
             self,

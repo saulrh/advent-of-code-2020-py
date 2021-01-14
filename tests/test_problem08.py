@@ -14,7 +14,7 @@ jmp -4
 acc +6"""
 
 
-class Test01(unittest.TestCase):
+class Test08(unittest.TestCase):
     def test_Example1(self):
         memory = [console.Instruction.FromLine(s) for s in DATA_1.splitlines()]
         final_state = problem08.DetectLoop(memory)

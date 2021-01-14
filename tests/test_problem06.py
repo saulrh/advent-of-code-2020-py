@@ -21,7 +21,7 @@ b
 """
 
 
-class Test01(unittest.TestCase):
+class Test06(unittest.TestCase):
     def test_example1(self):
         groups = problem.InBatches(
             lines=DATA.splitlines(),

@@ -6,7 +6,7 @@ from advent_of_code_2020_py import problem23
 EXAMPLE_1 = [3, 8, 9, 1, 2, 5, 4, 6, 7]
 
 
-class Test20(unittest.TestCase):
+class Test23(unittest.TestCase):
     def test_List(self):
         state = problem23.Buffer.Build(range(10))
         self.assertEqual(

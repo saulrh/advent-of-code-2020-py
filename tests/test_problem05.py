@@ -3,7 +3,7 @@ import unittest
 from advent_of_code_2020_py import problem05
 
 
-class Test01(unittest.TestCase):
+class Test05(unittest.TestCase):
     def test_example1(self):
         self.assertEqual(problem05.SeatID("FBFBBFFRLR"), 357)
 

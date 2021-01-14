@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
+import dataclasses
 from typing import Callable, Iterable, Mapping, Optional
-
-import attr
 
 from advent_of_code_2020_py import linalg
 from advent_of_code_2020_py import problem
@@ -20,7 +19,7 @@ def AllVisible(g: Grid, pt: linalg.Point) -> Iterable[str]:
     return [p for p in raw if p]
 
 
-@attr.s(auto_attribs=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class Grid(object):
     data: Mapping[linalg.Point, str]
 

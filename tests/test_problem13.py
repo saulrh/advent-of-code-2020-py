@@ -6,7 +6,7 @@ DATA = """939
 7,13,x,x,59,x,31,19"""
 
 
-class Test01(unittest.TestCase):
+class Test13(unittest.TestCase):
     def test_Parse(self):
         t, buses = problem13.ParseInput(DATA)
         self.assertEqual(t, 939)

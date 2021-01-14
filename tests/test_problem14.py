@@ -16,15 +16,15 @@ mem[26] = 1
 """
 
 
-class Test01(unittest.TestCase):
+class Test14(unittest.TestCase):
     def test_LineRegex(self):
         self.assertEqual(
             problem14.ParseLine("mask = XXXX10001"),
-            problem14.Instruction("mask", value="XXXX10001"),
+            problem14.MaskInstruction("XXXX10001"),
         )
         self.assertEqual(
             problem14.ParseLine("mem[8] = 10"),
-            problem14.Instruction("mem", addr=8, value="10"),
+            problem14.MemInstruction(addr=8, value=10),
         )
 
     def test_Example1(self):

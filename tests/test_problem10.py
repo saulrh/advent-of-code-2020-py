@@ -49,7 +49,7 @@ DATA_2 = """28
 """
 
 
-class Test01(unittest.TestCase):
+class Test10(unittest.TestCase):
     def test_Preprocess(self):
         adapters = problem10.PreprocessAdapters(
             int(d) for d in DATA_1.splitlines()

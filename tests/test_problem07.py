@@ -22,7 +22,7 @@ dark blue bags contain 2 dark violet bags.
 dark violet bags contain no other bags."""
 
 
-class Test01(unittest.TestCase):
+class Test07(unittest.TestCase):
     def test_SingleLine(self):
         self.assertEqual(
             problem07.LineTransform("black bags contain 1 white bag."),

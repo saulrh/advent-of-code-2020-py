@@ -154,7 +154,7 @@ def Comparable(g) -> str:
         return str(g).strip()
 
 
-class Test01(unittest.TestCase):
+class Test11(unittest.TestCase):
     def assertGridsEqual(self, a, b):
         self.assertEqual(Comparable(a), Comparable(b))
 

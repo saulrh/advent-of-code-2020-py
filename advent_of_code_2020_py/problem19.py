@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import dataclasses
 from typing import List
 
-import attr
 import lark
 import regex
 
@@ -24,7 +24,7 @@ def RewriteForPart2(inp: str) -> str:
     return inp.replace("11: 42 31", "11: 42 31 | 42 11 31")
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class ProblemStatement(object):
     g: lark.Lark
     messages: List[str]

@@ -1,24 +1,23 @@
 #!/usr/bin/env python
 
+import dataclasses
 import re
-from typing import Dict, Iterable, Iterator, Optional
-
-import attr
+from typing import Dict, Iterable, Iterator, Union
 
 from advent_of_code_2020_py import problem
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class State:
     mask: str = "X" * 36
-    memory: Dict[int, int] = attr.ib(factory=dict)
+    memory: Dict[int, int] = dataclasses.field(default_factory=dict)
 
     def Interpret1(self, line: str):
         instr = ParseLine(line)
-        if instr.op == "mask":
+        if isinstance(instr, MaskInstruction):
             self.mask = instr.value
-        elif instr.op == "mem":
-            self.memory[instr.addr] = MaskValue(self.mask, int(instr.value))
+        elif isinstance(instr, MemInstruction):
+            self.memory[instr.addr] = MaskValue(self.mask, instr.value)
         else:
             raise ValueError(f"Invalid instruction {instr}")
 
@@ -28,12 +27,12 @@ class State:
 
     def Interpret2(self, line: str):
         instr = ParseLine(line)
-        if instr.op == "mask":
+        if isinstance(instr, MaskInstruction):
             self.mask = instr.value
-        elif instr.op == "mem":
+        elif isinstance(instr, MemInstruction):
             for mem_value in MaskAddress(self.mask, instr.addr):
                 # print(self.mask, instr.addr, mem_value)
-                self.memory[mem_value] = int(instr.value)
+                self.memory[mem_value] = instr.value
         else:
             raise ValueError(f"Invalid instruction {instr}")
 
@@ -42,11 +41,15 @@ class State:
             self.Interpret2(line)
 
 
-@attr.s(auto_attribs=True, frozen=True)
-class Instruction(object):
-    op: str
-    addr: Optional[int] = None
-    value: Optional[str] = None
+@dataclasses.dataclass(frozen=True)
+class MaskInstruction(object):
+    value: str
+
+
+@dataclasses.dataclass(frozen=True)
+class MemInstruction(object):
+    addr: int
+    value: int
 
 
 def MaskValue(mask: str, value: int) -> int:
@@ -87,14 +90,14 @@ LINE_REGEX = re.compile(
 )
 
 
-def ParseLine(line: str) -> Instruction:
+def ParseLine(line: str) -> Union[MaskInstruction, MemInstruction]:
     line = line.strip()
     match = LINE_REGEX.fullmatch(line)
     if not match:
         raise ValueError(f"Could not parse line {line}")
     if match.group("mask"):
-        return Instruction("mask", value=match.group("value"))
-    return Instruction("mem", int(match.group("addr")), match.group("value"))
+        return MaskInstruction(match.group("value"))
+    return MemInstruction(int(match.group("addr")), int(match.group("value")))
 
 
 def part1():

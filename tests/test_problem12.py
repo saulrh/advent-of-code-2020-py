@@ -11,7 +11,7 @@ F11
 """
 
 
-class Test01(unittest.TestCase):
+class Test12(unittest.TestCase):
     def test_Part1(self):
         state = problem12.Ship()
         state = state.ApplyInputs(EXAMPLE_1.splitlines())

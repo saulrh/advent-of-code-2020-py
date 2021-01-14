@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+import dataclasses
 import re
 from typing import Iterable
 
-import attr
 import esper
 
 from advent_of_code_2020_py import problem
@@ -15,47 +15,47 @@ HCL_RE = re.compile(r"#[0-9a-f]{6}")
 VALID_ECLS = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class Passport(object):
     valid: bool
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class HairColor(object):
     hcl: str
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class Height(object):
     hgt: str
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class BirthYear(object):
     byr: str
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class IssueYear(object):
     iyr: str
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class ExpirationYear(object):
     eyr: str
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class EyeColor(object):
     ecl: str
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class PassportID(object):
     pid: str
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class CountryID(object):
     cid: str
 

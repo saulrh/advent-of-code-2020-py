@@ -8,7 +8,7 @@ DATA_1 = """.#.
 """
 
 
-class Test01(unittest.TestCase):
+class Test17(unittest.TestCase):
     def test_Parse(self):
         p = problem17.Parse(DATA_1, 3)
         self.assertEqual(

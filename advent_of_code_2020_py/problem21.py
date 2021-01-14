@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+import dataclasses
 import functools
 import itertools
 import operator
 from typing import Dict, Iterable, Set
 
-import attr
 import regex
 
 from advent_of_code_2020_py import debug
@@ -18,7 +18,7 @@ _FOOD_RE = regex.compile(
 )
 
 
-@attr.s(auto_attribs=True)
+@dataclasses.dataclass
 class Food(object):
     ingredients: Set[str]
     allergens: Set[str]
