@@ -13,6 +13,7 @@ setup:
 	poetry install
 	$(RUN) pre-commit install
 	$(RUN) ipython profile create --ProfileDir.location=./.ipython_profile
+	./make-pyrightconfig.sh
 
 problem%:
 	date
